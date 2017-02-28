@@ -16,13 +16,19 @@
 
     <meta name="author" content="carrot_path">
 
+    <!-- custom styles for this template -->
+    <link href="/css/app.css" rel="stylesheet">
     <!-- any additional css -->
     @yield('header')
 
 </head>
 
+
+
 <body>
     @include('layouts.nav')
+
+
 
     <!-- page content -->
     <div class="container">
@@ -30,8 +36,16 @@
         @yield('content')
     </div>
 
+
+
     <!-- foot/legal -->
     @include('layouts.footer')
+
+
+
+
+    <!-- custom js for this template -->
+    <script src="/js/app.js"></script>
 
     <!-- any additional js -->
     @yield('scripts')
