@@ -26,7 +26,7 @@
 
 
 <body>
-    @include('layouts.nav')
+    
 
 
 
