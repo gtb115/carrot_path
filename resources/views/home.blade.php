@@ -68,7 +68,10 @@
                 background-image: url('https://cdn1.iconfinder.com/data/icons/hawcons/32/698627-icon-111-search-128.png');
                 background-repeat: no-repeat;
                 background-size: 1.4em;
-                padding-bottom: 5px;
+                padding-bottom: 10px;
+                padding-top: 10px;
+                
+                border-radius: 20px 20px;
             }
 
             .m-b-md {
