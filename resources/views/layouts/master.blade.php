@@ -4,6 +4,7 @@
 <head>
     <title>@yield('title')</title>
 
+    {{-- fixes axios webpack problem --}}
     <script>
         window.Laravel = <?php echo json_encode([
             'csrfToken' => csrf_token(),
