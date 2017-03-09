@@ -1,47 +1,41 @@
 <!doctype html>
 
-<html lang="en">
+<html lang="{{ config('app.locale') }}">
 <head>
+    <title>@yield('title')</title>
+
+    <script>
+        window.Laravel = <?php echo json_encode([
+            'csrfToken' => csrf_token(),
+        ]); ?>
+    </script>
+
     <meta charset="utf-8">
-
-    <title>@yeild('title')</title>
-
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="enabling volunteers to connects with volunteering events">
     <meta name="keywords" content="volunteer, volunteering, volunteer events, non-profit, charity">
-    <meta @yield('meta')>
-
-    <!-- Move this to home page when built out.  do not keep in master -->
-    <meta name="robots" contents="follow, index">
-
     <meta name="author" content="carrot_path">
+    @yield('meta')
 
-    <!-- custom styles for this template -->
     <link href="/css/app.css" rel="stylesheet">
-    <!-- any additional css -->
-    @yield('header')
+    <link href="/css/nav.css" rel="stylesheet">
 
+    @yield('header')
 </head>
 
 
 
 <body>
-    
-
-
-
-    <!-- page content -->
+    @include('layouts.nav')
     <div class="container">
-        @include('layouts.messages')
+        {{-- @include('layouts.messages') --}}
         @yield('content')
     </div>
 
 
-
     <!-- foot/legal -->
     @include('layouts.footer')
-
-
 
 
     <!-- custom js for this template -->

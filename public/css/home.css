@@ -1,0 +1,71 @@
+html, body {
+    background-color: #fff;
+    color: #636b6f;
+    font-family: 'Satisfy', cursive;
+    font-weight: 400;
+    height: 100vh;
+    margin: 0;
+    z-index: 1;
+    background-image: url('https://blogs-images.forbes.com/sap/files/2016/12/All-In-Workers-1200x800.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.full-height {
+    height: 80vh;
+}
+
+.flex-center {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+
+}
+
+
+.content {
+    text-align: center;
+    background-color: ;
+    margin-right: 9em;
+}
+
+.title {
+    font-size: 84px;
+
+    color: #31034A;
+}
+
+.search {
+    -webkit-appearance: none;
+    height: 100%;
+    width: 100%;
+    background-color:#FFF;
+    color:#666;
+    font-weight:bold;
+    border: solid #666 1px;
+    text-align: center;
+    font-size: 2em;
+
+}
+
+input {
+    background-image: url('https://cdn1.iconfinder.com/data/icons/hawcons/32/698627-icon-111-search-128.png');
+    background-repeat: no-repeat;
+    background-size: 1.4em;
+    padding-bottom: 10px;
+    padding-top: 10px;
+
+    border-radius: 20px 20px;
+}
+
+.m-b-md {
+    margin-bottom: 10px;
+    font-family: 'Satisfy', cursive;
+}
+
+.message {
+    margin-bottom: 40px;
+    font-family: 'Satisfy', cursive;
+    font-size: 2em;
+    color: #31034A;
+}
