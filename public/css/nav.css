@@ -1,69 +1,26 @@
-/*ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-
-}
-
-li {
-  float: right;
-}
-
-li a {
-  display: block;
-  color: white;
-  text-align: center;
-  padding: 24px 26px;
-  text-decoration: none;
-  color: #5F0292;
-  font-weight: bold;
-}
-
-.logo {
-  height: auto;
-  width: 68px;
-  color: #5F0292;
-  float: left;
-  text-align: center;
-
-}*/
-
-.logo {
-  height: auto;
-  width: 68px;
-  color: #5F0292;
-  float: left;
-  text-align: center;
-}
 
 nav {
-  background-color: blue;
+  height: auto;
+  background-color: ;
 }
 
-/*#dropbtn {
-    height: 66px;
-    width: 68px;
-    color: white;
-    margin-top: 20px;
-    font-size: 16px;
-    border: none;
-    cursor: pointer;
+.logo {
+  text-align: center;
+  width: 68px;
+  color: #5F0292;
+  float: left;
+  
+  background-color: ;
+  vertical-align: middle;
+}
 
-}*/
 
-/*#dropbtn div {
-    width: 35px;
-    height: 5px;
-    background-color: #5F0292;
-    margin: 6px 0;
-
-}*/
 
 .dropdown {
     position: relative;
 
     float: left;
+    margin-left: 1em;
     margin-bottom: 1em;
     background-color: ;
 }

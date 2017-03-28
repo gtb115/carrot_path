@@ -25,14 +25,19 @@
     @yield('header')
 </head>
 
-
+<style>
+    
+    body {
+        display: flex;
+        flex-direction: column;
+    }
+</style>
 
 <body>
-    @include('layouts.nav')
-    <div class="container">
-        {{-- @include('layouts.messages') --}}
-        @yield('content')
-    </div>
+    
+    {{-- @include('layouts.messages') --}}
+    @yield('content')
+   
 
 
     <!-- foot/legal -->

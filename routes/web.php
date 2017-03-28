@@ -15,4 +15,8 @@ Route::get('/', function () {
     return view('home');
 });
 
+// Route::get('query', function () {
+//     return view('query');
+// });
 
+Route::post("/query", 'EventsController@home');

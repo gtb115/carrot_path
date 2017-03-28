@@ -4,10 +4,10 @@ html, body {
     font-family: 'Satisfy', cursive;
     font-weight: 400;
     height: 100vh;
-    margin: 0;
+    margin: 0px;
     z-index: 1;
-    background-image: url('https://blogs-images.forbes.com/sap/files/2016/12/All-In-Workers-1200x800.jpg');
-    background-repeat: no-repeat;
+  background-image: url('https://blogs-images.forbes.com/sap/files/2016/12/All-In-Workers-1200x800.jpg');
+   background-repeat: no-repeat;
     background-size: cover;
 }
 
@@ -23,7 +23,7 @@ html, body {
 }
 
 
-.content {
+.contentt {
     text-align: center;
     background-color: ;
     margin-right: 9em;
@@ -49,8 +49,8 @@ html, body {
 }
 
 input {
-    background-image: url('https://cdn1.iconfinder.com/data/icons/hawcons/32/698627-icon-111-search-128.png');
-    background-repeat: no-repeat;
+/*    background-image: url('https://cdn1.iconfinder.com/data/icons/hawcons/32/698627-icon-111-search-128.png');
+*/    background-repeat: no-repeat;
     background-size: 1.4em;
     padding-bottom: 10px;
     padding-top: 10px;
