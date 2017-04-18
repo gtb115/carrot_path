@@ -1,67 +1,120 @@
 @extends('layouts.master')
 @section('title')
-    CARROT PATH
+CARROT PATH
 @endsection
 @section('header')
-    <link rel="stylesheet" type="text/css" href="{{asset('css/query.css')}}"/>
-    <link rel="stylesheet" type="text/css" href="{{asset('css/nav_query.css')}}"/>
-    <link rel="stylesheet" type="text/javascript" href="{{asset('js/query.js')}}"/>
+<link rel="stylesheet" type="text/css" href="{{asset('css/query.css')}}"/>
+<link rel="stylesheet" type="text/css" href="{{asset('css/nav_query.css')}}"/>
+<link rel="stylesheet" type="text/javascript" href="{{asset('js/query.js')}}"/>
+<script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="//code.jquery.com/jquery-1.12.4.js"></script>
 @endsection
 
 @section('meta')
-    <meta name="robots" contents="follow, index">
+<meta name="robots" contents="follow, index">
 @endsection
 
 @section('content') 
 @include('layouts.nav_query')
-<form>
-  <input  type="text" name="search" placeholder="Search..">
-  <button class="filter">Filter</button>
-  
-</form>
- 
-  <div class="query">
-    <div class="results_list">
-      <table>
-        <tr>
+<div class="form_con">
 
-          <td>
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Small-city-symbol.svg/348px-Small-city-symbol.svg.png" />
-            <h1>Org Name</h1>
-            <p>Name of Event</p>
-            <p>
+  <input type="text" name="search" placeholder="Search..">
 
-
-          </td>
-        </tr>
-
-          <td>
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Small-city-symbol.svg/348px-Small-city-symbol.svg.png" />
-            <h1>Org Name</h1>
-            <p>Name of Event</p>
-            <p>
-
-
-          </td>
-        </tr>
-      <td>
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Small-city-symbol.svg/348px-Small-city-symbol.svg.png" />
-            <h1>Org Name</h1>
-            <p>Name of Event</p>
-            <p>
-
-
-          </td>
-      </tr>
-    
-      </table>
+  <div class="filter">Filter
+    <div class="filter-content">
+      <a href="#">Date-Range</a>
+      <a href="#">Location</a>
+      <a href="#">Organization</a>
+      <a href="#">Ratings</a>
     </div>
-   <!--  <div class="map"><img src="https://developers.google.com/maps/documentation/android-api/images/utility-markercluster-simple.png"/></div> -->
-    <div id="map"></div> 
   </div>
- 
+</div>
+<div class="query">
+  <div class="results_list">
+    <div class="initial_view">
+      <div class="pic"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Small-city-symbol.svg/348px-Small-city-symbol.svg.png" title="Pic" />
+      </div>
+      <div class="eventInfo">
+        <div class="eventInfo_details">
+          <h1>Org Name - Name of Event</h1>
+          <p>Date: June 24, 2017 11am - 2pm</p>
+          <p>Available Spots: 3</p>
+        </div>
+
+        <div class="btns btns1">
+          <p>V</p>
+        </div>
+        <div class="btns btns2">
+          <p>></p>
+        </div>
+      </div>
+
+    </div>
+    <div class="secondCon">
+      <div class="secondPan">
+        <h1>ABOUT:</h1>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
+          dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        </div>
+        <div class="thirdPan">
+          <h1>Event Details:</h1>
+          <p><b>Location:</b> 123 Road St, City CA, 94111</p>
+          <p><b>Director:</b> Sterling Archer</p>
+          <p><b>Organization:</b> ISIS</p>
+          <p><b>Contact:</b> Sign Up For Direct Contact Info</p>
+        </div>
+        <div class="ratings">
+          <h2>This coordinator has a rating of:</h2>
+        </div>
+        <div class="buttonsCon">
+          <button>Sign-Up</button>
+          <button>Favorites</button>
+          <button>Future Events</button>
+        </div>
+      </div>
+    </div>
+    <!-- <div class="map"><img src="https://developers.google.com/maps/documentation/android-api/images/utility-markercluster-simple.png" /> -->
+      <div id="map"></div>
+    </div>
+
+  
+
+ <!-- DROP DOWN SCRIPT -->
+
+ <script>
+ $(document).ready(function() {
+  $(".btns1").click(function() {
+    $(".secondCon").show()
+    $(".results_list").animate({
+      height: "40em"
+    });
+
+  });
+  $(".btns2").click(function() {
+    $(".secondCon").hide()
+    $(".results_list").animate({
+      height: "9em"
+    });
+  });
+});
+
+$(document).ready(function() {
+  $(".filter").click(function() {
+    $(".filter-content").toggle(200);
+  });
+});
+</script>
+
+<!-- END DROP DOWN SCRIPT -->
+
 <script>
-function zipradius(calanderevents, zip) {
+  $(document).ready(function() {
+    $(".filter").click(function() {
+      $(".filter-content").toggle(200);
+    });
+  });
+
+  function zipradius(calanderevents, zip) {
         // grab zipcode from geocoder below 
         console.log('alf');
         console.log(zip);
@@ -72,7 +125,7 @@ function zipradius(calanderevents, zip) {
         $.getJSON(url, null, function (data){
 
 
-          
+
           zipradius = [];
           x=0;
 
@@ -86,7 +139,7 @@ function zipradius(calanderevents, zip) {
           y=0;
           console.log(zipradius); 
           calanderevents.forEach(function(element){
-            
+
             console.log(element.zip);
             console.log(element.zip == zipradius[2]);
             console.log(zipradius.includes(element.zip));
@@ -108,7 +161,7 @@ function zipradius(calanderevents, zip) {
           // note map is a js function in this case not google maps
           // check example for expanation https://www.w3schools.com/jsref/jsref_map.asp
           var markers = calanderevents.map(function(event){
-                return new google.maps.Marker({
+            return new google.maps.Marker({
               position:{lat: event["Lat"], lng: event["Lon"]},
               map: map,
               label: event["title"]
@@ -137,7 +190,7 @@ function zipradius(calanderevents, zip) {
         $.getJSON(url, null, function (data){
 
 
-          
+
           zipradius = [];
           x=0;
 
@@ -152,7 +205,7 @@ function zipradius(calanderevents, zip) {
           zipradius.push(zip);
           console.log(zipradius); 
           calanderevents.forEach(function(element){
-            
+
             console.log(element.zip);
             console.log(element.zip == zipradius[2]);
             console.log(zipradius.includes(element.zip));
@@ -174,8 +227,8 @@ function zipradius(calanderevents, zip) {
           // place each calendar event in a markers arrray on the map.
           // note map is a js function in this case not google maps
           // check example for expanation https://www.w3schools.com/jsref/jsref_map.asp
-           markers = calanderevents.map(function(event){
-                return new google.maps.Marker({
+          markers = calanderevents.map(function(event){
+            return new google.maps.Marker({
               position:{lat: event["Lat"], lng: event["Lon"]},
               map: map,
               label: event["title"]
@@ -212,32 +265,32 @@ function zipradius(calanderevents, zip) {
         });
 
         var searchBox = new google.maps.places.SearchBox(input);
-         map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+        map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
  // Create the search box and link it to the UI element.
 
 
-    console.log(google.maps.version);
-        
+ console.log(google.maps.version);
 
-      
 
-        
 
-        
-        
-        zipradius(calanderevents, zip);
 
-        console.log(window);
+
+
+
+
+ zipradius(calanderevents, zip);
+
+ console.log(window);
 
         //Event listener for when place is changed.
         searchBox.addListener('places_changed', function() {
-          
-    
-    deleteMarkers();
+
+
+          deleteMarkers();
         //call in geocoder to get zip.  
         var geocoder = new google.maps.Geocoder();
         //reset calander events to default.
-          
+
           // call to google api returns information about place entered in search box
           // does not includ zip code  zip 
           //see https://developers.google.com/places/web-service/search
@@ -246,11 +299,11 @@ function zipradius(calanderevents, zip) {
 
           geocodeAddress(geocoder, map);
 
-        
+
 
           //get new zip radius
           // note must be put in new function.(copy of zip radius)
-      
+
 
           
 
@@ -258,7 +311,7 @@ function zipradius(calanderevents, zip) {
             return;
           }
 
-         var bounds = new google.maps.LatLngBounds();
+          var bounds = new google.maps.LatLngBounds();
           places.forEach(function(place) {
             if (!place.geometry) {
               console.log("Returned place contains no geometry");
@@ -283,33 +336,33 @@ function zipradius(calanderevents, zip) {
             //changes the bounds on the map.
             map.fitBounds(bounds); 
           });
-      });
+        });
 
       }
 
-  function geocodeAddress(geocoder, map) {
-          var address = document.getElementById('pac-input').value;
-          geocoder.geocode({'address': address}, function(results, status) {
-            if (status === 'OK') {
+      function geocodeAddress(geocoder, map) {
+        var address = document.getElementById('pac-input').value;
+        geocoder.geocode({'address': address}, function(results, status) {
+          if (status === 'OK') {
 
-              
 
-              
-      
 
-                  zip = results[0].address_components[7].long_name;
-                  zipradius2(calanderevents, zip);
 
-                  
-                 
-              console.log(map);
-                 console.log(results[0].address_components[7].long_name);
-                
-            } else {
-              alert('Geocode was not successful for the following reason: ' + status);
-            }
-          });
-        }
+
+
+            zip = results[0].address_components[7].long_name;
+            zipradius2(calanderevents, zip);
+
+
+
+            console.log(map);
+            console.log(results[0].address_components[7].long_name);
+
+          } else {
+            alert('Geocode was not successful for the following reason: ' + status);
+          }
+        });
+      }
 
       
       
@@ -347,6 +400,6 @@ function zipradius(calanderevents, zip) {
         clearMarkers();
         markers = [];
       }
-</script>
+    </script>
 
-@endsection
+    @endsection
