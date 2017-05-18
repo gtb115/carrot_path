@@ -1,6 +1,6 @@
 <?php
 namespace App\Http\Controllers;
-// use App\calanderevent;
+use App\Event;
 use Illuminate\Http\Request;
 class EventsController extends Controller
 {
@@ -13,11 +13,11 @@ class EventsController extends Controller
     {
       $zip = request('zip');
       
-      // $calanderevents = calanderevent::all();
+      $calanderevents = Event::all();
        
       //$calanderevents = $calanderevents->toJson();
       //dd($calanderevents);
-      return view('query', compact('zip'));
+      return view('query', compact('zip', 'calanderevents'));
     }
     public function query()
     {

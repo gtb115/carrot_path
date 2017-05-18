@@ -21,7 +21,8 @@ class Events extends Migration
            $table->text('description');
            $table->integer('max_volunteer')->unsigned();
            $table->integer('num_registered_volunteers')->unsigned()->default(0);
-
+           $table->decimal('Lat', 10, 7);
+           $table->decimal('Lon', 10, 7);
            $table->text('address_street');
            $table->text('address_city');
            $table->text('address_state');

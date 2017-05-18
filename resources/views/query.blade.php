@@ -18,7 +18,7 @@ CARROT PATH
 @include('layouts.nav_query')
 <div class="form_con">
 
-  <input type="text" name="search" placeholder="Search..">
+  <input id="search" type="text" name="search" placeholder="Search..">
 
   <div class="filter">Filter
     <div class="filter-content">
@@ -34,9 +34,9 @@ CARROT PATH
     <div class="initial_view">
       <div class="pic"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Small-city-symbol.svg/348px-Small-city-symbol.svg.png" title="Pic" />
       </div>
-      <div class="eventInfo">
+      <div data-bind="foreach: filter_event" class="eventInfo">
         <div class="eventInfo_details">
-          <h1>Org Name - Name of Event</h1>
+          <h1 data-bind="text: title">Org Name - Name of Event</h1>
           <p>Date: June 24, 2017 11am - 2pm</p>
           <p>Available Spots: 3</p>
         </div>
@@ -81,6 +81,11 @@ CARROT PATH
 
  <!-- DROP DOWN SCRIPT -->
 
+<script
+  src="https://code.jquery.com/jquery-3.2.1.js"
+  integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
+  crossorigin="anonymous"></script>
+
  <script>
  $(document).ready(function() {
   $(".btns1").click(function() {
@@ -96,310 +101,248 @@ CARROT PATH
       height: "9em"
     });
   });
-});
 
-$(document).ready(function() {
+
+
   $(".filter").click(function() {
     $(".filter-content").toggle(200);
   });
 });
+
+
 </script>
-
-<!-- END DROP DOWN SCRIPT -->
-
 <script>
-  $(document).ready(function() {
-    $(".filter").click(function() {
-      $(".filter-content").toggle(200);
-    });
-  });
+      // global vaiables 
+        var map;
+        var calanderevents;
+        var markers;
+        var zip;
+        var geocoder;
+        var input = document.getElementById("search");
 
-  function zipradius(calanderevents, zip) {
+function zipradius(calanderevents, zip) {
+// ko.applyBindings({calanderevents});
         // grab zipcode from geocoder below 
         console.log('alf');
         console.log(zip);
+
         //Note app must use Client-id not the app id.  Must use localhost as app or api will fail in testing 
         //must be set to carrotpath.com during production.
         var url = 'https://www.zipcodeapi.com/rest/js-6iaTquHqJbqfVwoSyqHuxhJGDUsRYud5NoYdSGDBR4RMBgFaGmEdEnThil9gQnmD/radius.json/'+zip+'/1/km';
         //get Json object and retirieve the data in the oblect
         $.getJSON(url, null, function (data){
-
-
-
+          
           zipradius = [];
-          x=0;
+          // x=0;
 
           console.log(data);
           //iterate through your your data and but the zip codes in a list.
-          data.zip_codes.forEach(function(element) {
+          data.zip_codes.forEach(function(element, i) {
             //place search radius 
-            zipradius[x] = parseInt(element.zip_code);
-            x += 1;
+            zipradius[i] = parseInt(element.zip_code);
           });
-          y=0;
-          console.log(zipradius); 
+          console.log(zipradius);
+          filter_event =[];
           calanderevents.forEach(function(element){
-
-            console.log(element.zip);
-            console.log(element.zip == zipradius[2]);
-            console.log(zipradius.includes(element.zip));
             
             //checks to see if element is included in list 
-            if (zipradius.includes(element.zip)){
-
+            if (zipradius.includes(element.address_zip)){
+              filter_event.push(element); 
+              console.log(element.address_zip);
             }
-            else {
-              //deletes the calendar events that arnt include in the list of zp codes 
-              delete calanderevents[y];
-              
-            }
-            y += 1;
+            
           });
-          markers = [];
+          console.log(filter_event);
+          // var viewModel = ko.mapping.fromJS(filter_event);
+          // ko.mapping.fromJS(filter_event, viewModel);
+          ko.applyBindings(filter_event, document.getElementById("table_data"));
 
-          // place each calendar event in a markers arrray on the map.
-          // note map is a js function in this case not google maps
-          // check example for expanation https://www.w3schools.com/jsref/jsref_map.asp
-          var markers = calanderevents.map(function(event){
-            return new google.maps.Marker({
+
+          markers = filter_event.map(function(event){
+                return new google.maps.Marker({
               position:{lat: event["Lat"], lng: event["Lon"]},
               map: map,
               label: event["title"]
             })
           });
-
           
-          
-          //calendar event output now only includes events included in the radius 
-          console.log(calanderevents);
-          console.log(data.zip_codes[1].zip_code);
-          return markers;
+          markers.map(function(event){
+            event.setMap(map);
+          });
         });
 
       }
       function zipradius2(calanderevents, zip) {
-        // grab zipcode from geocoder below 
-        deleteMarkers();
-        console.log(markers);
+// ko.applyBindings({calanderevents});
+        // grab zipcode from geocoder below
         console.log('alf');
         console.log(zip);
+        
         //Note app must use Client-id not the app id.  Must use localhost as app or api will fail in testing 
         //must be set to carrotpath.com during production.
         var url = 'https://www.zipcodeapi.com/rest/js-6iaTquHqJbqfVwoSyqHuxhJGDUsRYud5NoYdSGDBR4RMBgFaGmEdEnThil9gQnmD/radius.json/'+zip+'/1/km';
-        //get Json object and retirieve the data in the object
+        //get Json object and retirieve the data in the oblect
         $.getJSON(url, null, function (data){
-
-
-
+          
           zipradius = [];
-          x=0;
+          // x=0;
 
           console.log(data);
           //iterate through your your data and but the zip codes in a list.
-          data.zip_codes.forEach(function(element) {
+          data.zip_codes.forEach(function(element, i) {
             //place search radius 
-            zipradius[x] = parseInt(element.zip_code);
-            x += 1;
+            zipradius[i] = parseInt(element.zip_code);
           });
-          y=0;
-          zipradius.push(zip);
-          console.log(zipradius); 
+          console.log(zipradius);
+          filter_event2 =[];
           calanderevents.forEach(function(element){
-
-            console.log(element.zip);
-            console.log(element.zip == zipradius[2]);
-            console.log(zipradius.includes(element.zip));
             
             //checks to see if element is included in list 
-            if (zipradius.includes(element.zip)){
-
+            if (zipradius.includes(element.address_zip)){
+              filter_event2.push(element); 
+              console.log(element.address_zip);
             }
-            else {
-              //deletes the calendar events that arnt include in the list of zp codes 
-              delete calanderevents[y];
-              
-            }
-            y += 1;
+            
           });
-          markers = [];
-          console.log(calanderevents)
-
-          // place each calendar event in a markers arrray on the map.
-          // note map is a js function in this case not google maps
-          // check example for expanation https://www.w3schools.com/jsref/jsref_map.asp
-          markers = calanderevents.map(function(event){
-            return new google.maps.Marker({
+          console.log(filter_event2);
+          filter_event2O = ko.observableArray(filter_event2);
+          try {
+          ko.applyBindings(filter_event2O, document.getElementById("table_data2"));
+      }
+      catch(err) {
+        console.log("Cannot bind to more than once")
+      }
+     
+          markers = filter_event2.map(function(event){
+                return new google.maps.Marker({
               position:{lat: event["Lat"], lng: event["Lon"]},
               map: map,
               label: event["title"]
             })
           });
-
           
-          
-          //calendar event output now only includes events included in the radius 
-          console.log(calanderevents);
-          console.log(markers);
-          console.log(data.zip_codes[1].zip_code);
-          
+          markers.map(function(event){
+            event.setMap(map);
+          });
         });
+      
+
+        
 
       }
-      // In the following example, markers appear when the user clicks on the map.
-      // The markers are stored in an array.
-      // The user can then click an option to hide, show or delete the markers.
-      var map;
-      var markers = [];
-      var zip = {{$zip}};
-      var input = document.getElementById('pac-input');
+
+      function deleteMarkers() {
+        markers.map(function(event){
+            event.setMap(null);
+          });
+        markers = [];
+      }
+    
+        
+        function initMap() {
+          geocoder = new google.maps.Geocoder();
+          // call in zip from home page
+          zip="{{$zip}}";
 
 
-
-      function initMap() {
-        var haightAshbury = {lat: 37.769, lng: -122.446};
-
-        map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 12,
-          center: haightAshbury,
-          mapTypeId: 'terrain'
-        });
-
-        var searchBox = new google.maps.places.SearchBox(input);
-        map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
- // Create the search box and link it to the UI element.
-
-
- console.log(google.maps.version);
-
-
-
-
-
-
-
-
- zipradius(calanderevents, zip);
-
- console.log(window);
-
-        //Event listener for when place is changed.
-        searchBox.addListener('places_changed', function() {
-
-
-          deleteMarkers();
-        //call in geocoder to get zip.  
-        var geocoder = new google.maps.Geocoder();
-        //reset calander events to default.
-
-          // call to google api returns information about place entered in search box
-          // does not includ zip code  zip 
-          //see https://developers.google.com/places/web-service/search
-
-          var places = searchBox.getPlaces();
-
-          geocodeAddress(geocoder, map);
-
-
-
-          //get new zip radius
-          // note must be put in new function.(copy of zip radius)
-
-
+        geocoder.geocode({
+          "address": zip
+          }, function(results, status) {
+            // call in new map and center it baced on zip
+                map = new google.maps.Map(document.getElementById('map'), {
+                // Center map (but check status of geocoder)
+                center: results[0].geometry.location,
+                zoom: 11,
+                mapTypeId: google.maps.MapTypeId.ROADMAP,
+            })
+                // calls in calanderevents for the radius zip function 
+          var calanderevents = [
+          @foreach($calanderevents as $event)
+          { id:{{$event->id}},
+            title: "{{$event->title}}",
+            description: "{{$event->description}}",
+            start:new Date("{{$event->start}}"),
+            end: new Date("{{$event->end}}"),
+            address_street: "{{$event->address_street}}",
+            address_city: "{{$event->address_city}}",
+            address_state: "{{$event->address_state}}",
+            address_zip: {{$event->address_zip}},
+            Lat: {{$event->Lat}},
+            Lon: {{$event->Lon}},},
+            @endforeach
+            ];
           
 
-          if (places.length == 0) {
-            return;
-          }
+          // Filter Markers with zipradius fuction definded above
+          zipradius(calanderevents, zip);
+      
+          });
 
+        console.log(input);
+
+          var searchBox = new google.maps.places.SearchBox(input);
+
+          
+        searchBox.addListener('places_changed', function() {
           var bounds = new google.maps.LatLngBounds();
-          places.forEach(function(place) {
-            if (!place.geometry) {
-              console.log("Returned place contains no geometry");
-              return;
-            }
-            var icon = {
-              url: place.icon,
-              size: new google.maps.Size(71, 71),
-              origin: new google.maps.Point(0, 0),
-              anchor: new google.maps.Point(17, 34),
-              scaledSize: new google.maps.Size(25, 25)
-            };
-            //checks to see if a viwport exist 
-            //if viwport does not exist it uses location 
-            if (place.geometry.viewport) {
+          document.getElementById("table_data").style.display = "none";
+          document.getElementById("table_data2").style.visibility = "visible";
+
+
+          var calanderevents = [
+          @foreach($calanderevents as $event)
+          { id:{{$event->id}},
+            title: "{{$event->title}}",
+            description: "{{$event->description}}",
+            start:new Date("{{$event->start}}"),
+            end: new Date("{{$event->end}}"),
+            address_street: "{{$event->address_street}}",
+            address_city: "{{$event->address_city}}",
+            address_state: "{{$event->address_state}}",
+            address_zip: {{$event->address_zip}},
+            Lat: {{$event->Lat}},
+            Lon: {{$event->Lon}},},
+            @endforeach
+            ];
+
+          var places = searchBox.getPlaces();
+          zip = places[0].address_components[7].long_name;
+          console.log(calanderevents);
+          console.log(places);
+          deleteMarkers();
+
+          zipradius2(calanderevents, zip);
+          if (places[0].geometry.viewport) {
               // Only geocodes have viewport.
               console.log(places[0].geometry.viewport);
-              bounds.union(place.geometry.viewport);
+              bounds.union(places[0].geometry.viewport);
             } else {
-              bounds.extend(place.geometry.location);
+              bounds.extend(places[0].geometry.location);
             }
             //changes the bounds on the map.
             map.fitBounds(bounds); 
-          });
+
+
         });
 
-      }
-
-      function geocodeAddress(geocoder, map) {
-        var address = document.getElementById('pac-input').value;
-        geocoder.geocode({'address': address}, function(results, status) {
-          if (status === 'OK') {
-
-
-
-
-
-
-            zip = results[0].address_components[7].long_name;
-            zipradius2(calanderevents, zip);
-
-
-
-            console.log(map);
-            console.log(results[0].address_components[7].long_name);
-
-          } else {
-            alert('Geocode was not successful for the following reason: ' + status);
-          }
-        });
-      }
-
-      
-      
-      
-
-
-      // Adds a marker to the map and push to the array.
-      function addMarker(location) {
-        var marker = new google.maps.Marker({
-          position: location,
-          map: map
-        });
-        markers.push(marker);
-      }
-
-      // Sets the map on all markers in the array.
-      function setMapOnAll(map) {
-        for (var i = 0; i < markers.length; i++) {
-          markers[i].setMap(map);
         }
-      }
 
-      // Removes the markers from the map, but keeps them in the array.
-      function clearMarkers() {
-        setMapOnAll(null);
-      }
 
-      // Shows any markers currently in the array.
-      function showMarkers() {
-        setMapOnAll(map);
-      }
 
-      // Deletes all markers in the array by removing references to them.
-      function deleteMarkers() {
-        clearMarkers();
-        markers = [];
-      }
-    </script>
+        // Sets the map on all markers in the array.
+        
 
-    @endsection
+  </script>
+
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.1/knockout-min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/knockout.mapping/2.4.1/knockout.mapping.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDqif7v2gfexClzI134YyDF793sS5ZzG7M&libraries=places&callback=initMap"
+    async defer></script>
+<!-- Jquery -->
+<script
+  src="https://code.jquery.com/jquery-3.2.1.js"
+  integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
+  crossorigin="anonymous"></script>
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
