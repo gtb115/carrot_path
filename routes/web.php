@@ -10,13 +10,15 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+use Illuminate\Support\Facades\DB;
 
 Route::get('/', function () {
     return view('home');
 });
 
-// Route::get('query', function () {
-//     return view('query');
-// });
+Route::get('query2', function () {
+	$calanderevents = DB::table('events')->get();
+    return view('query2', ['calanderevents' => $calanderevents]);
+});
 
 Route::post("/query", 'EventsController@home');

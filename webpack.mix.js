@@ -13,8 +13,6 @@ const {
  |
  */
 
-mix.js(['resources/assets/js/app.js',
-        'resources/assets/js/nav.js'
-    ], 'public/js')
+mix.js('resources/assets/js/app.js', 'public/js')
     .sass('resources/assets/sass/app.scss', 'public/css');
 mix.combine('resources/assets/css/nav.css', 'public/css/nav');

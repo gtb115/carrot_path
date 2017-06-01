@@ -19,7 +19,7 @@
     <meta name="author" content="carrot_path">
     @yield('meta')
 
-    <link href="/css/app.css" rel="stylesheet">
+    <link href="{{asset('css/app.css')}}" rel="stylesheet">
     <link href="/css/nav.css" rel="stylesheet">
 
     @yield('header')
@@ -37,6 +37,7 @@
     
     {{-- @include('layouts.messages') --}}
     @yield('content')
+    
    
 
 
@@ -45,7 +46,7 @@
 
 
     <!-- custom js for this template -->
-    <script src="/js/app.js"></script>
+    <script src="{{asset('js/app.js')}}"></script>
 
     <!-- any additional js -->
     @yield('scripts')
