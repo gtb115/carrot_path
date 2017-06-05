@@ -14,68 +14,32 @@ CARROT PATH
 
 @section('content') 
 @include('layouts.nav_query')
-<div class="form_con">
-
-  <input id="search" type="text" name="search" placeholder="Search..">
-
-  <div class="filter">Filter
-    <div class="filter-content">
-      <a href="#">Date-Range</a>
-      <a href="#">Location</a>
-      <a href="#">Organization</a>
-      <a href="#">Ratings</a>
-    </div>
-  </div>
+<div id="query">
+	
 </div>
-<div class="query">
-  <div class="results_list">
-    <div class="initial_view">
-      <div class="pic"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Small-city-symbol.svg/348px-Small-city-symbol.svg.png" title="Pic" />
-      </div>
-      <div data-bind="foreach: filter_event" class="eventInfo">
-        <div class="eventInfo_details">
-          <h1 data-bind="text: title">Org Name - Name of Event</h1>
-          <p>Date: June 24, 2017 11am - 2pm</p>
-          <p>Available Spots: 3</p>
-        </div>
-
-        <div class="btns btns1">
-          <p>V</p>
-        </div>
-        <div class="btns btns2">
-          <p>></p>
-        </div>
-      </div>
-
-    </div>
-    <div class="secondCon">
-      <div class="secondPan">
-        <h1>ABOUT:</h1>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
-          dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-        </div>
-        <div class="thirdPan">
-          <h1>Event Details:</h1>
-          <p><b>Location:</b> 123 Road St, City CA, 94111</p>
-          <p><b>Director:</b> Sterling Archer</p>
-          <p><b>Organization:</b> ISIS</p>
-          <p><b>Contact:</b> Sign Up For Direct Contact Info</p>
-        </div>
-        <div class="ratings">
-          <h2>This coordinator has a rating of:</h2>
-        </div>
-        <div class="buttonsCon">
-          <button>Sign-Up</button>
-          <button>Favorites</button>
-          <button>Future Events</button>
-        </div>
-      </div>
-    </div>
-    <!-- <div class="map"><img src="https://developers.google.com/maps/documentation/android-api/images/utility-markercluster-simple.png" /> -->
-      <div id="map"></div>
-    </div>
-   @endsection
+@endsection
+ 
 @section('scripts')
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDqif7v2gfexClzI134YyDF793sS5ZzG7M&libraries=places"></script>
+<script>
+  // calls in calanderevents for the radius zip function 
+          window.calanderevents = [
+          @foreach($calanderevents as $event)
+          { id:{{$event->id}},
+            title: "{{$event->title}}",
+            description: "{{$event->description}}",
+            start:new Date("{{$event->start}}"),
+            end: new Date("{{$event->end}}"),
+            address_street: "{{$event->address_street}}",
+            address_city: "{{$event->address_city}}",
+            address_state: "{{$event->address_state}}",
+            address_zip: {{$event->address_zip}},
+            Lat: {{$event->Lat}},
+            Lon: {{$event->Lon}},},
+            @endforeach
+            ];
+</script>
+<script src="{{asset('js/app.js')}}"></script>
     <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 	<script src="//code.jquery.com/jquery-1.12.4.js"></script>
 	<script
@@ -83,7 +47,10 @@ CARROT PATH
   integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
   crossorigin="anonymous"></script>
 
+    <!-- custom js for this template -->
+   
  <script>
+ // JS for list show and hide 
  $(document).ready(function() {
   $(".btns1").click(function() {
     $(".secondCon").show()
@@ -123,28 +90,32 @@ function zipradius(calanderevents, zip) {
         console.log('alf');
         console.log(zip);
 
-        //Note app must use Client-id not the app id.  Must use localhost as app or api will fail in testing 
+        //Note app must use Client-id not the app id.  Must use localhost as app or api will fail in testing
+        //http://www.zipcodeapi.com/API for zip code by radius 
         //must be set to carrotpath.com during production.
         var url = 'https://www.zipcodeapi.com/rest/js-6iaTquHqJbqfVwoSyqHuxhJGDUsRYud5NoYdSGDBR4RMBgFaGmEdEnThil9gQnmD/radius.json/'+zip+'/1/km';
         //get Json object and retirieve the data in the oblect
         $.getJSON(url, null, function (data){
-          
+          create a blank list to store zipcpdes within radious
           zipradius = [];
-          // x=0;
-
+         
           console.log(data);
           //iterate through your your data and but the zip codes in a list.
           data.zip_codes.forEach(function(element, i) {
-            //place search radius 
+            //place each zipcode in that radius into a list 
             zipradius[i] = parseInt(element.zip_code);
           });
           console.log(zipradius);
+          // Create a new empty list to store the filterd events
           filter_event =[];
+          // cycle through each calanderevent
           calanderevents.forEach(function(element){
             
             //checks to see if element is included in list 
             if (zipradius.includes(element.address_zip)){
+            // if the calendar's zip matches the radius in xip radius it is pused to our new filter_event 
               filter_event.push(element); 
+
               console.log(element.address_zip);
             }
             
@@ -152,9 +123,11 @@ function zipradius(calanderevents, zip) {
           console.log(filter_event);
           // var viewModel = ko.mapping.fromJS(filter_event);
           // ko.mapping.fromJS(filter_event, viewModel);
+          // applying KO to list
           ko.applyBindings(filter_event, document.getElementById("table_data"));
 
-
+          //markers are are crated from the filter event. 
+          //Nope map is a JS function 
           markers = filter_event.map(function(event){
                 return new google.maps.Marker({
               position:{lat: event["Lat"], lng: event["Lon"]},
@@ -162,7 +135,7 @@ function zipradius(calanderevents, zip) {
               label: event["title"]
             })
           });
-          
+          //markers are set on map
           markers.map(function(event){
             event.setMap(map);
           });
@@ -175,7 +148,8 @@ function zipradius(calanderevents, zip) {
         console.log('alf');
         console.log(zip);
         
-        //Note app must use Client-id not the app id.  Must use localhost as app or api will fail in testing 
+        //Note app must use Client-id not the app id.  Must use localhost as app or api will fail in testing
+        //http://www.zipcodeapi.com/API for zip code by radius 
         //must be set to carrotpath.com during production.
         var url = 'https://www.zipcodeapi.com/rest/js-6iaTquHqJbqfVwoSyqHuxhJGDUsRYud5NoYdSGDBR4RMBgFaGmEdEnThil9gQnmD/radius.json/'+zip+'/1/km';
         //get Json object and retirieve the data in the oblect
@@ -185,9 +159,9 @@ function zipradius(calanderevents, zip) {
           // x=0;
 
           console.log(data);
-          //iterate through your your data and but the zip codes in a list.
+          //iterate through your your data and put the zip codes in a list.
           data.zip_codes.forEach(function(element, i) {
-            //place search radius 
+            //place each zipcode in that radius into a list  
             zipradius[i] = parseInt(element.zip_code);
           });
           console.log(zipradius);
@@ -238,10 +212,10 @@ function zipradius(calanderevents, zip) {
         
         function initMap() {
           geocoder = new google.maps.Geocoder();
-          // call in zip from home page
+          // call in zip from home page for testing purposes I have just hardcoded it on this page.
           zip="95123";
 
-
+        //retuns map with the zip code provided 
         geocoder.geocode({
           "address": zip
           }, function(results, status) {
@@ -276,16 +250,17 @@ function zipradius(calanderevents, zip) {
           });
 
         console.log(input);
-
+        	// connect searchBox to the input
           var searchBox = new google.maps.places.SearchBox(input);
 
-          
+         //event listener to see when place in changed when and run code below to refilter events   
         searchBox.addListener('places_changed', function() {
           var bounds = new google.maps.LatLngBounds();
+          //no longer in existance but was used to switch tables so objects can be rebound using KO.JS
           document.getElementById("table_data").style.display = "none";
           document.getElementById("table_data2").style.visibility = "visible";
 
-
+          // Pull in calanderevents from laravel database
           var calanderevents = [
           @foreach($calanderevents as $event)
           { id:{{$event->id}},
@@ -301,13 +276,14 @@ function zipradius(calanderevents, zip) {
             Lon: {{$event->Lon}},},
             @endforeach
             ];
-
+            //get use the imput to get zipcode from place
           var places = searchBox.getPlaces();
           zip = places[0].address_components[7].long_name;
           console.log(calanderevents);
           console.log(places);
+          // Clear markers
           deleteMarkers();
-
+          //run the second zip radus function to refilter events.
           zipradius2(calanderevents, zip);
           if (places[0].geometry.viewport) {
               // Only geocodes have viewport.
@@ -333,8 +309,6 @@ function zipradius(calanderevents, zip) {
 
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.1/knockout-min.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/knockout.mapping/2.4.1/knockout.mapping.js"></script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDqif7v2gfexClzI134YyDF793sS5ZzG7M&libraries=places&callback=initMap"
-    async defer></script>
 <!-- Jquery -->
 <script
   src="https://code.jquery.com/jquery-3.2.1.js"

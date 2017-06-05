@@ -37,16 +37,12 @@
     
     {{-- @include('layouts.messages') --}}
     @yield('content')
-    
+
    
 
 
     <!-- foot/legal -->
     @include('layouts.footer')
-
-
-    <!-- custom js for this template -->
-    <script src="{{asset('js/app.js')}}"></script>
 
     <!-- any additional js -->
     @yield('scripts')
