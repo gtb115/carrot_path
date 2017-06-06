@@ -12151,36 +12151,38 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
 
+var geocoder = new google.maps.Geocoder();
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'query',
   mounted: function mounted() {
     var _this = this;
 
+    this.zip = window.zip;
     this.events = this.allEvents = window.calanderevents;
-    this.events.forEach(function (event) {
-      _this.markers.push(new google.maps.Marker({
-        position: { lat: event["Lat"], lng: event["Lon"] },
-        map: _this.map,
-        label: event["title"]
-      }));
+    console.log("zip:", this.zip);
+    geocoder.geocode({
+      address: '' + this.zip
+    }, function (results, status) {
+      _this.map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 10,
+        center: results[0].geometry.location,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+      });
+      _this.zipradius(_this.zip);
     });
-    this.map = new google.maps.Map(document.getElementById('map'), {
-      zoom: 10,
-      center: { lat: 10, lng: 5 },
-      mapTypeId: google.maps.MapTypeId.ROADMAP
-    });
+
     // connect searchBox to the input
     this.searchBox = new google.maps.places.SearchBox(document.getElementById('search'));
     this.searchBox.addListener('places_changed', function () {
       var places = _this.searchBox.getPlaces();
       console.log('places:', places);
-      _this.zipradius(places[0].address_components[7].long_name);
+      _this.zipradius(places[0].address_components[7].long_name, places[0]);
     });
   },
   data: function data() {
     return {
+      zip: "",
       allEvents: [],
       events: [],
       map: null,
@@ -12190,7 +12192,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   },
 
   methods: {
-    zipradius: function zipradius(zip) {
+    zipradius: function zipradius(zip, place) {
       var _this2 = this;
 
       console.log(zip);
@@ -12239,10 +12241,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             label: event["title"]
           }));
         });
-        //markers are set on map
-        // markers.map(function(event){
-        //   event.setMap(map);
-        // });
+        var bounds = new google.maps.LatLngBounds();
+        if (place) {
+          // Only geocodes have viewport.
+          if (place.geometry.viewport) {
+            console.log(place.geometry.viewport);
+            bounds.union(place.geometry.viewport);
+          } else if (place && place.geometry.location) {
+            bounds.extend(place.geometry.location);
+          }
+          //changes the bounds on the map.
+          _this2.map.fitBounds(bounds);
+        }
       });
     }
   }
@@ -31942,7 +31952,7 @@ module.exports = function normalizeComponent (
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', [_vm._m(0), _vm._v(" "), _c('div', {
     staticClass: "query"
-  }, [_vm._l((_vm.events), function(event) {
+  }, _vm._l((_vm.events), function(event) {
     return _c('div', {
       staticClass: "results_list"
     }, [_c('div', {
@@ -31965,11 +31975,11 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }, [_c('h1', [_vm._v("ABOUT:")]), _vm._v(" "), _c('p', [_vm._v(_vm._s(event.description))])]), _vm._v(" "), _c('div', {
       staticClass: "thirdPan"
     }, [_c('h1', [_vm._v("Event Details:")]), _vm._v(" "), _c('p', [_c('b', [_vm._v("Location:")]), _vm._v(_vm._s(event.address_street) + ", " + _vm._s(event.address_city) + ", " + _vm._s(event.address_zip))]), _vm._v(" "), _vm._m(4, true), _vm._v(" "), _vm._m(5, true), _vm._v(" "), _vm._m(6, true)]), _vm._v(" "), _vm._m(7, true), _vm._v(" "), _vm._m(8, true)])])
-  }), _vm._v(" "), _c('div', {
+  })), _vm._v(" "), _c('div', {
     attrs: {
       "id": "map"
     }
-  })], 2)])
+  })])
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "form_con"

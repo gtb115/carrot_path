@@ -21,4 +21,4 @@ Route::get('query2', function () {
     return view('query2', ['calanderevents' => $calanderevents]);
 });
 
-Route::post("/query", 'EventsController@home');
+Route::post('query2', 'EventsController@home');

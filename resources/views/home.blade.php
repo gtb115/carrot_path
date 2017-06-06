@@ -22,7 +22,7 @@
 
             <div class="links">
                 <div class="message">Find Volunteering Opportunities Near You</div>
-                <form method="POST" action='/query' class="form-inline">
+                <form method="POST" action='/query2' class="form-inline">
                 <input type="search" class="search" name="zip" style='font-family: Molengo, sans-serif' placeholder="Enter You City or Town..."/>
                 {{ csrf_field() }}
                 </form>

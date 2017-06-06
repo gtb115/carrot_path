@@ -23,6 +23,7 @@ CARROT PATH
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDqif7v2gfexClzI134YyDF793sS5ZzG7M&libraries=places"></script>
 <script>
   // calls in calanderevents for the radius zip function 
+          window.zip = {{$zip}};
           window.calanderevents = [
           @foreach($calanderevents as $event)
           { id:{{$event->id}},

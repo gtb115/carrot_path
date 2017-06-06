@@ -17,7 +17,7 @@ class EventsController extends Controller
        
       //$calanderevents = $calanderevents->toJson();
       //dd($calanderevents);
-      return view('query', compact('zip', 'calanderevents'));
+      return view('query2', compact('zip', 'calanderevents'));
     }
     public function query()
     {

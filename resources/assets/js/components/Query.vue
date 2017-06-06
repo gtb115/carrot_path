@@ -57,40 +57,42 @@
         </div>
       </div>
   </div>
-    <!-- <div class="map"><img src="https://developers.google.com/maps/documentation/android-api/images/utility-markercluster-simple.png" /> -->
-      <div id="map"></div>
     </div>
+    <div id="map"></div>
 
 </div>
 
 </template>
 <script>
+let geocoder = new google.maps.Geocoder();
 export default {
 	name: 'query',
   mounted () {
+    this.zip = window.zip;
     this.events = this.allEvents = window.calanderevents;
-    this.events.forEach((event) => {
-        this.markers.push(new google.maps.Marker({
-          position:{lat: event["Lat"], lng: event["Lon"]},
-          map: this.map,
-          label: event["title"]
-        }))
-    });
-    this.map = new google.maps.Map(document.getElementById('map'), {
-      zoom: 10,
-      center: {lat: 10, lng:5},
-      mapTypeId: google.maps.MapTypeId.ROADMAP
-    })
+    console.log("zip:", this.zip);
+    geocoder.geocode({
+      address: `${this.zip}`
+    }, (results, status) => {
+      this.map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 10,
+        center: results[0].geometry.location,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+      });
+      this.zipradius(this.zip);
+    }) 
+    
     // connect searchBox to the input
     this.searchBox = new google.maps.places.SearchBox(document.getElementById('search'));
     this.searchBox.addListener('places_changed', () => {
       let places = this.searchBox.getPlaces();
       console.log('places:', places);
-      this.zipradius(places[0].address_components[7].long_name);
+      this.zipradius(places[0].address_components[7].long_name, places[0]);
     })
   },
   data () {
     return {
+      zip: "",
       allEvents: [],
       events: [],
       map: null,
@@ -99,7 +101,7 @@ export default {
     }
   },
   methods: {
-    zipradius(zip) {
+    zipradius(zip, place) {
         console.log(zip);
 
         //Note app must use Client-id not the app id.  Must use localhost as app or api will fail in testing
@@ -147,10 +149,19 @@ export default {
                 label: event["title"]
               }))
           });
-          //markers are set on map
-          // markers.map(function(event){
-          //   event.setMap(map);
-          // });
+          var bounds = new google.maps.LatLngBounds();
+          if (place) {
+              // Only geocodes have viewport.
+              if(place.geometry.viewport) {
+                console.log(place.geometry.viewport);
+                bounds.union(place.geometry.viewport);
+              }else if(place && place.geometry.location){
+                bounds.extend(place.geometry.location);
+              }
+              //changes the bounds on the map.
+              this.map.fitBounds(bounds);
+          } 
+             
         });
 
       }
